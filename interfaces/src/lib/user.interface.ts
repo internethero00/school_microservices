@@ -1,3 +1,14 @@
+import { Types } from 'mongoose'
+
+export enum UserRole {
+  Teacher='Teacher',
+  Student='Student'
+}
+
 export interface IUser {
-  name: string;
+  _id?: Types.ObjectId;
+  displayName?: string;
+  email: string;
+  passwordHash: string;
+  role: UserRole;
 }
