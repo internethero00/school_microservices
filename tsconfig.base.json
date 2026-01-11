@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@school/interfaces": ["interfaces/src/index.ts"]
+      "@school/interfaces": ["interfaces/src/index.ts"],
+      "@school/contracts": ["contracts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

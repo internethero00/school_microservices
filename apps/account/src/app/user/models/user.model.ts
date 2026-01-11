@@ -10,7 +10,7 @@ export class User extends Document implements IUser {
   email: string;
   @Prop({ required: true })
   passwordHash: string;
-  @Prop({ required: true, enum: UserRole, default: UserRole.Student })
+  @Prop({type: String, required: true, enum: UserRole, default: UserRole.Student })
   role: UserRole;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
