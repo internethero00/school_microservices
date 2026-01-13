@@ -5,6 +5,7 @@ dist
 tmp
 out-tsc
 envs
+error.log
 # dependencies
 node_modules
 
