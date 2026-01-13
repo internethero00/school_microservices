@@ -11,7 +11,7 @@ import { UserController } from './controllers/user.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.envs/..api.env',
+      envFilePath: 'envs/.api.env',
       isGlobal: true,
     }),
     RMQModule.forRootAsync(

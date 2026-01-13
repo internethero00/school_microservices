@@ -12,7 +12,7 @@ export class AuthController {
   async register(
     @Body() dto: AccountRegister.Request,
   ): Promise<AccountRegister.Response> {
-    return this.authService.register(dto);
+      return await this.authService.register(dto);
   }
 
   @RMQValidate()

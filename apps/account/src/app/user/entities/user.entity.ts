@@ -1,7 +1,6 @@
 import { IUser, UserRole } from '@school/interfaces';
 import { Types } from 'mongoose';
-import { compare, genSalt } from 'bcryptjs';
-import { hash } from 'node:crypto';
+import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {
   constructor(user: IUser) {
@@ -19,7 +18,7 @@ export class UserEntity implements IUser {
 
   public async setPassword(password: string) {
     const salt = await genSalt(10);
-    this.passwordHash = hash(password, salt);
+    this.passwordHash = await hash(password, salt);
     return this;
   }
 

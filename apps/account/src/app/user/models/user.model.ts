@@ -2,6 +2,7 @@ import { Document } from 'mongoose';
 import { IUser, UserRole } from '@school/interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+
 @Schema()
 export class User extends Document implements IUser {
   @Prop()
