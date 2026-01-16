@@ -24,6 +24,14 @@ export class UserEntity implements IUser {
     return this;
   }
 
+  public getPublicProfile() {
+    return {
+      email: this.email,
+      role: this.role,
+      displayName: this.displayName,
+    }
+  }
+
   public async validatePassword(password: string) {
     return compare(password, this.passwordHash);
   }
