@@ -16,8 +16,6 @@ export class UserCourses extends Document implements IUserCourses {
 }
 export const UserCoursesSchema = SchemaFactory.createForClass(UserCourses);
 
-
-
 @Schema()
 export class User extends Document implements IUser {
   @Prop()
@@ -26,9 +24,14 @@ export class User extends Document implements IUser {
   email: string;
   @Prop({ required: true })
   passwordHash: string;
-  @Prop({type: String, required: true, enum: UserRole, default: UserRole.Student })
+  @Prop({
+    type: String,
+    required: true,
+    enum: UserRole,
+    default: UserRole.Student,
+  })
   role: UserRole;
-  @Prop({type: [UserCoursesSchema], _id: false})
-  courses: Types.Array<UserCourses>
+  @Prop({ type: [UserCoursesSchema], _id: false })
+  courses: Types.Array<UserCourses>;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
