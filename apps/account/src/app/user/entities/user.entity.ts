@@ -1,4 +1,9 @@
-import { IUser, IUserCourses, UserRole } from '@school/interfaces';
+import {
+  IUser,
+  IUserCourses,
+  PurchaseState,
+  UserRole,
+} from '@school/interfaces';
 import { Types } from 'mongoose';
 import { compare, genSalt, hash } from 'bcryptjs';
 
@@ -24,12 +29,33 @@ export class UserEntity implements IUser {
     return this;
   }
 
+  public addCourse(courseId: string) {
+    const exist = this.courses.find((course) => course.courseId === courseId);
+    if (exist) {
+      throw new Error('Course already purchased');
+    }
+    this.courses.push({
+      courseId,
+      purchaseState: PurchaseState.Started,
+    });
+  }
+
+  public deleteCourse(courseId: string) {
+    this.courses = this.courses.filter((course) => course.courseId !== courseId);
+  }
+
+  public updateCourseStatus(courseId: string, purchaseState: PurchaseState) {
+    this.courses = this.courses.map((course) =>
+      course.courseId === courseId ? { ...course, purchaseState } : course,
+    );
+  }
+
   public getPublicProfile() {
     return {
       email: this.email,
       role: this.role,
       displayName: this.displayName,
-    }
+    };
   }
 
   public async validatePassword(password: string) {
