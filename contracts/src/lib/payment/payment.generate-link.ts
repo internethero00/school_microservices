@@ -16,6 +16,6 @@ export namespace PaymentGenerateLink {
     sum!: number;
   }
   export class Response {
-    link!: string;
+    paymentLink!: string;
   }
 }
