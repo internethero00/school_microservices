@@ -13,6 +13,6 @@ export namespace PaymentCheck{
 
   }
   export class Response {
-    status!: 'cancelled' | 'success' | 'progress';
+    status!: 'canceled' | 'success' | 'progress';
   }
 }
