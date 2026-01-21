@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { PurchaseState } from '@school/interfaces';
+import { PaymentStatus } from '../payment/payment.check';
 
 export namespace AccountCheckPayment {
   export const topic = 'account.check-payment.command';
@@ -11,6 +11,6 @@ export namespace AccountCheckPayment {
     courseId!: string;
   }
   export class Response {
-    static!: PurchaseState;
+    status!: PaymentStatus;
   }
 }

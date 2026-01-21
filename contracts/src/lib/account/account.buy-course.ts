@@ -10,6 +10,6 @@ export namespace AccountBuyCourse {
     courseId!: string;
   }
   export class Response {
-    paymentUrl!: string;
+    paymentLink!: string;
   }
 }
