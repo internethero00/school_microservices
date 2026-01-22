@@ -1,4 +1,5 @@
 import {
+  IDomainEvent,
   IUser,
   IUserCourses,
   PurchaseState,
@@ -6,6 +7,7 @@ import {
 } from '@school/interfaces';
 import { Types } from 'mongoose';
 import { compare, genSalt, hash } from 'bcryptjs';
+import { AccountChangedCourse } from '@school/contracts';
 
 export class UserEntity implements IUser {
   constructor(user: IUser) {
@@ -22,6 +24,7 @@ export class UserEntity implements IUser {
   passwordHash: string;
   role: UserRole;
   courses?: IUserCourses[];
+  events: IDomainEvent[] = [];
 
   public async setPassword(password: string) {
     const salt = await genSalt(10);
@@ -36,7 +39,9 @@ export class UserEntity implements IUser {
       return this;
     }
     if (state === PurchaseState.Canceled) {
-      this.courses = this.courses.filter((course) => course.courseId !== courseId);
+      this.courses = this.courses.filter(
+        (course) => course.courseId !== courseId,
+      );
       return this;
     }
     this.courses = this.courses.map((course) => {
@@ -45,7 +50,11 @@ export class UserEntity implements IUser {
         return course;
       }
       return course;
-    })
+    });
+    this.events.push({
+      topic: AccountChangedCourse.topic,
+      data: { courseId, userId: this._id.toString(), state },
+    });
     return this;
   }
 
