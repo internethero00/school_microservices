@@ -3,7 +3,7 @@ import { UserEntity } from '../entities/user.entity';
 import {
   CourseGetCourse,
   PaymentCheck,
-  PaymentGenerateLink,
+  PaymentGenerateLink, PaymentStatus,
 } from '@school/contracts';
 import { PurchaseState } from '@school/interfaces';
 
@@ -13,7 +13,7 @@ export class BuyCourseSagaStateStarted extends BuyCourseSagaState {
     return {user : this.saga.user}
   }
 
-  checkPayment(): Promise<{ user: UserEntity }> {
+  checkPayment(): Promise<{ user: UserEntity, status: PaymentStatus }> {
     throw new Error('The payment process is not started yet');
   }
 
@@ -43,19 +43,19 @@ export class BuyCourseSagaStateWaitingForPayment extends BuyCourseSagaState {
     throw new Error('The payment process is already started');
   }
 
-  public async checkPayment(): Promise<{ user: UserEntity }> {
+  public async checkPayment(): Promise<{ user: UserEntity, status: PaymentStatus }> {
     const {status} = await this.saga.rmqService.send<PaymentCheck.Request, PaymentCheck.Response>(PaymentCheck.topic, {
       courseId: this.saga.courseId, userId: this.saga.user._id.toString()
     });
     if (status === 'canceled') {
       this.saga.setState(PurchaseState.Canceled, this.saga.courseId);
-      return {user : this.saga.user}
+      return {user : this.saga.user, status: 'canceled'}
     }
     if (status !== 'success') {
-      return {user: this.saga.user}
+      return {user: this.saga.user, status: 'success'}
     }
     this.saga.setState(PurchaseState.Purchased, this.saga.courseId);
-    return {user: this.saga.user}
+    return {user: this.saga.user, status: 'progress'}
   }
 
   pay(): Promise<{ paymentLink: string; user: UserEntity }> {
@@ -68,7 +68,7 @@ export class BuyCourseSagaStatePurchased extends BuyCourseSagaState {
     throw new Error('The payment process is already finished');
   }
 
-  checkPayment(): Promise<{ user: UserEntity }> {
+  checkPayment(): Promise<{ user: UserEntity, status: PaymentStatus }> {
     throw new Error('The payment process is already finished');
   }
 
@@ -82,7 +82,7 @@ export class BuyCourseSagaStateCanceled extends BuyCourseSagaState {
     throw new Error('The payment process is already canceled');
   }
 
-  checkPayment(): Promise<{ user: UserEntity }> {
+  checkPayment(): Promise<{ user: UserEntity, status: PaymentStatus }> {
     throw new Error('The payment process is already canceled');
   }
 
