@@ -15,7 +15,6 @@ export interface IUser {
 }
 
 export interface IUserCourses {
-  _id?: Types.ObjectId;
   courseId: string;
   purchaseState: PurchaseState;
 
