@@ -30,4 +30,8 @@ export class UserRepository {
   async updateUser({_id, ...rest}:UserEntity) {
     return this.userModel.updateOne({ _id }, {$set: {...rest}}).exec();
   }
+
+  async healthCheck() {
+    return this.userModel.findOne({}).exec();
+  }
 }
