@@ -16,7 +16,9 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     try {
-      return await this.rmqService.send<AccountRegister.Request, AccountRegister.Response>(AccountRegister.topic, dto)
+      return await this.rmqService.send<AccountRegister.Request, AccountRegister.Response>(AccountRegister.topic, dto, {headers: {
+        requestId: 'for logging'
+        }})
     } catch (e) {
       if (e instanceof Error) throw new UnauthorizedException(e.message)
     }
