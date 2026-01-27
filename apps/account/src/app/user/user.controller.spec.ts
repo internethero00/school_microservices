@@ -8,10 +8,12 @@ import { INestApplication } from '@nestjs/common';
 import { UserRepository } from './repositories/user.repository';
 import {
   AccountBuyCourse,
+  AccountCheckPayment,
   AccountLogin,
   AccountRegister,
   AccountUserInfo,
   CourseGetCourse,
+  PaymentCheck,
   PaymentGenerateLink,
 } from '@school/contracts';
 import { join } from 'path';
@@ -20,7 +22,7 @@ import { AuthModule } from '../auth/auth.module';
 import { Types } from 'mongoose';
 
 const authLogin: AccountLogin.Request = {
-  email: 'a@a111.ru',
+  email: 'a@a1111.ru',
   password: '1111111',
 };
 
@@ -102,6 +104,17 @@ describe('UserController', () => {
       AccountBuyCourse.Request,
       AccountBuyCourse.Response
     >(AccountBuyCourse.topic, {userId, courseId })).rejects.toThrow();
+  });
+
+  it('CheckPayment', async () => {
+    rmqService.mockReply<PaymentCheck.Response>(PaymentCheck.topic, {
+      status : 'success',
+    });
+    const res = await rmqService.triggerRoute<
+      AccountCheckPayment.Request,
+      AccountCheckPayment.Response
+    >(AccountCheckPayment.topic, {userId, courseId });
+    expect(res.status).toEqual('success');
   });
 
   afterAll(async () => {
