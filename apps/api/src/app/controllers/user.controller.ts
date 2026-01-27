@@ -1,5 +1,6 @@
 import {
   Controller,
+  Logger,
   Post,
   UnauthorizedException,
   UseGuards,
@@ -8,6 +9,7 @@ import { JWTAuthGuard } from '../guards/jwt.guard';
 import { UserId } from '../guards/user.decorator';
 import { RMQService } from 'nestjs-rmq';
 import { AccountUserInfo } from '@school/contracts';
+import { Cron } from '@nestjs/schedule';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +25,11 @@ export class UserController {
     } catch (e) {
       if (e instanceof Error) throw new UnauthorizedException(e.message)
     }
+  }
+
+  @Cron('*/5 * * * * *')
+  async cron() {
+    Logger.log('Done');
   }
 
 }
